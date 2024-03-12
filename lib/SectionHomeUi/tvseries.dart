@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:r08fullmovieapp/RepeatedFunction/sliderlist.dart';
-import 'package:r08fullmovieapp/apikey/apikey.dart';
+import 'package:r08fullmovieapp/apiKey/apiKey.dart';
 
 class TvSeries extends StatefulWidget {
   const TvSeries({super.key});
@@ -16,11 +16,11 @@ class _TvSeriesState extends State<TvSeries> {
   List<Map<String, dynamic>> topratedtvseries = [];
   List<Map<String, dynamic>> onairtvseries = [];
   var populartvseriesurl =
-      'https://api.themoviedb.org/3/tv/popular?api_key=$apikey';
+      'https://api.themoviedb.org/3/tv/popular?api_key=$apiKey';
   var topratedtvseriesurl =
-      'https://api.themoviedb.org/3/tv/top_rated?api_key=$apikey';
+      'https://api.themoviedb.org/3/tv/top_rated?api_key=$apiKey';
   var onairtvseriesurl =
-      'https://api.themoviedb.org/3/tv/on_the_air?api_key=$apikey';
+      'https://api.themoviedb.org/3/tv/on_the_air?api_key=$apiKey';
   Future<void> tvseriesfunction() async {
     /////////////////////////////////////////////
     var populartvresponse = await http.get(Uri.parse(populartvseriesurl));
@@ -87,10 +87,10 @@ class _TvSeriesState extends State<TvSeries> {
     return FutureBuilder(
         future: tvseriesfunction(),
         builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting)
+          if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(
                 child: CircularProgressIndicator(color: Colors.amber.shade400));
-          else {
+          } else {
             return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [

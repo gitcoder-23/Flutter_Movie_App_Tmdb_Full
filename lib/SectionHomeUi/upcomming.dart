@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:r08fullmovieapp/RepeatedFunction/sliderlist.dart';
 import '../RepeatedFunction/repttext.dart';
-import 'package:r08fullmovieapp/apikey/apikey.dart';
+import 'package:r08fullmovieapp/apiKey/apiKey.dart';
 
 class Upcomming extends StatefulWidget {
   const Upcomming({super.key});
@@ -16,7 +16,7 @@ class _UpcommingState extends State<Upcomming> {
   List<Map<String, dynamic>> getUpcomminglist = [];
   Future<void> getUpcomming() async {
     var url = Uri.parse(
-        'https://api.themoviedb.org/3/movie/upcoming?api_key=$apikey');
+        'https://api.themoviedb.org/3/movie/upcoming?api_key=$apiKey');
     var response = await http.get(url);
     if (response.statusCode == 200) {
       var json = jsonDecode(response.body);
@@ -50,7 +50,7 @@ class _UpcommingState extends State<Upcomming> {
                       child: tittletext("Many More Coming Soon... "))
                 ]);
           } else {
-            return Center(
+            return const Center(
                 child: CircularProgressIndicator(color: Colors.amber));
           }
         });

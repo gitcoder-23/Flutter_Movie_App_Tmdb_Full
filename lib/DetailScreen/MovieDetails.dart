@@ -1,10 +1,11 @@
 import 'dart:convert';
 import 'package:flutter/gestures.dart';
 import 'package:r08fullmovieapp/RepeatedFunction/sliderlist.dart';
-import 'package:r08fullmovieapp/apikey/apikey.dart';
+
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:r08fullmovieapp/HomePage/HomePage.dart';
+import 'package:r08fullmovieapp/apikey/apiKey.dart';
 import '../RepeatedFunction/TrailerUI.dart';
 import '../RepeatedFunction/favoriateandshare.dart';
 import '../RepeatedFunction/repttext.dart';
@@ -19,7 +20,7 @@ import '../RepeatedFunction/reviewui.dart';
 
 class MovieDetails extends StatefulWidget {
   var id;
-  MovieDetails({this.id});
+  MovieDetails({super.key, this.id});
   @override
   State<MovieDetails> createState() => _MovieDetailsState();
 }
@@ -34,21 +35,16 @@ class _MovieDetailsState extends State<MovieDetails> {
   List MoviesGeneres = [];
 
   Future Moviedetails() async {
-    var moviedetailurl = 'https://api.themoviedb.org/3/movie/' +
-        widget.id.toString() +
-        '?api_key=$apikey';
-    var UserReviewurl = 'https://api.themoviedb.org/3/movie/' +
-        widget.id.toString() +
-        '/reviews?api_key=$apikey';
-    var similarmoviesurl = 'https://api.themoviedb.org/3/movie/' +
-        widget.id.toString() +
-        '/similar?api_key=$apikey';
-    var recommendedmoviesurl = 'https://api.themoviedb.org/3/movie/' +
-        widget.id.toString() +
-        '/recommendations?api_key=$apikey';
-    var movietrailersurl = 'https://api.themoviedb.org/3/movie/' +
-        widget.id.toString() +
-        '/videos?api_key=$apikey';
+    var moviedetailurl =
+        'https://api.themoviedb.org/3/movie/${widget.id}?api_key=$apiKey';
+    var UserReviewurl =
+        'https://api.themoviedb.org/3/movie/${widget.id}/reviews?api_key=$apiKey';
+    var similarmoviesurl =
+        'https://api.themoviedb.org/3/movie/${widget.id}/similar?api_key=$apiKey';
+    var recommendedmoviesurl =
+        'https://api.themoviedb.org/3/movie/${widget.id}/recommendations?api_key=$apiKey';
+    var movietrailersurl =
+        'https://api.themoviedb.org/3/movie/${widget.id}/videos?api_key=$apiKey';
 
     var moviedetailresponse = await http.get(Uri.parse(moviedetailurl));
     if (moviedetailresponse.statusCode == 200) {
@@ -158,13 +154,13 @@ class _MovieDetailsState extends State<MovieDetails> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromRGBO(14, 14, 14, 1),
+      backgroundColor: const Color.fromRGBO(14, 14, 14, 1),
       body: FutureBuilder(
           future: Moviedetails(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.done) {
               return CustomScrollView(
-                  physics: BouncingScrollPhysics(),
+                  physics: const BouncingScrollPhysics(),
                   slivers: [
                     SliverAppBar(
                         automaticallyImplyLeading: false,
@@ -182,7 +178,7 @@ class _MovieDetailsState extends State<MovieDetails> {
                               ]);
                               Navigator.pop(context);
                             },
-                            icon: Icon(FontAwesomeIcons.circleArrowLeft),
+                            icon: const Icon(FontAwesomeIcons.circleArrowLeft),
                             iconSize: 28,
                             color: Colors.white),
                         actions: [
@@ -191,14 +187,15 @@ class _MovieDetailsState extends State<MovieDetails> {
                                 Navigator.pushAndRemoveUntil(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => MyHomePage()),
+                                        builder: (context) =>
+                                            const MyHomePage()),
                                     (route) => false);
                               },
-                              icon: Icon(FontAwesomeIcons.houseUser),
+                              icon: const Icon(FontAwesomeIcons.houseUser),
                               iconSize: 25,
                               color: Colors.white)
                         ],
-                        backgroundColor: Color.fromRGBO(18, 18, 18, 0.5),
+                        backgroundColor: const Color.fromRGBO(18, 18, 18, 0.5),
                         centerTitle: false,
                         pinned: true,
                         expandedHeight:
@@ -233,21 +230,23 @@ class _MovieDetailsState extends State<MovieDetails> {
                         children: [
                           Row(children: [
                             Container(
-                                padding: EdgeInsets.only(left: 10, top: 10),
+                                padding:
+                                    const EdgeInsets.only(left: 10, top: 10),
                                 height: 50,
                                 width: MediaQuery.of(context).size.width,
                                 child: ListView.builder(
-                                    physics: BouncingScrollPhysics(),
+                                    physics: const BouncingScrollPhysics(),
                                     scrollDirection: Axis.horizontal,
                                     itemCount: MoviesGeneres.length,
                                     itemBuilder: (context, index) {
                                       //generes box
                                       return Container(
-                                          margin: EdgeInsets.only(right: 10),
-                                          padding: EdgeInsets.all(10),
+                                          margin:
+                                              const EdgeInsets.only(right: 10),
+                                          padding: const EdgeInsets.all(10),
                                           decoration: BoxDecoration(
-                                              color:
-                                                  Color.fromRGBO(25, 25, 25, 1),
+                                              color: const Color.fromRGBO(
+                                                  25, 25, 25, 1),
                                               borderRadius:
                                                   BorderRadius.circular(10)),
                                           child:
@@ -257,43 +256,44 @@ class _MovieDetailsState extends State<MovieDetails> {
                           Row(
                             children: [
                               Container(
-                                  padding: EdgeInsets.all(10),
-                                  margin: EdgeInsets.only(left: 10, top: 10),
+                                  padding: const EdgeInsets.all(10),
+                                  margin:
+                                      const EdgeInsets.only(left: 10, top: 10),
                                   height: 40,
                                   decoration: BoxDecoration(
-                                      color: Color.fromRGBO(25, 25, 25, 1),
+                                      color:
+                                          const Color.fromRGBO(25, 25, 25, 1),
                                       borderRadius: BorderRadius.circular(10)),
                                   child: genrestext(
-                                      MovieDetails[0]['runtime'].toString() +
-                                          ' min'))
+                                      '${MovieDetails[0]['runtime']} min'))
                             ],
                           )
                         ],
                       ),
                       Padding(
-                          padding: EdgeInsets.only(left: 20, top: 10),
+                          padding: const EdgeInsets.only(left: 20, top: 10),
                           child: tittletext('Movie Story :')),
                       Padding(
-                          padding: EdgeInsets.only(left: 20, top: 10),
+                          padding: const EdgeInsets.only(left: 20, top: 10),
                           child: overviewtext(
                               MovieDetails[0]['overview'].toString())),
 
                       Padding(
-                        padding: EdgeInsets.only(left: 20, top: 10),
+                        padding: const EdgeInsets.only(left: 20, top: 10),
                         child: ReviewUI(revdeatils: UserREviews),
                       ),
                       Padding(
-                          padding: EdgeInsets.only(left: 20, top: 20),
-                          child: normaltext('Release Date : ' +
-                              MovieDetails[0]['release_date'].toString())),
+                          padding: const EdgeInsets.only(left: 20, top: 20),
+                          child: normaltext(
+                              'Release Date : ${MovieDetails[0]['release_date']}')),
                       Padding(
-                          padding: EdgeInsets.only(left: 20, top: 20),
-                          child: normaltext('Budget : ' +
-                              MovieDetails[0]['budget'].toString())),
+                          padding: const EdgeInsets.only(left: 20, top: 20),
+                          child: normaltext(
+                              'Budget : ${MovieDetails[0]['budget']}')),
                       Padding(
-                          padding: EdgeInsets.only(left: 20, top: 20),
-                          child: normaltext('Revenue : ' +
-                              MovieDetails[0]['revenue'].toString())),
+                          padding: const EdgeInsets.only(left: 20, top: 20),
+                          child: normaltext(
+                              'Revenue : ${MovieDetails[0]['revenue']}')),
                       sliderlist(similarmovieslist, "Similar Movies", "movie",
                           similarmovieslist.length),
                       sliderlist(recommendedmovieslist, "Recommended Movies",
@@ -304,7 +304,7 @@ class _MovieDetailsState extends State<MovieDetails> {
                     ]))
                   ]);
             } else {
-              return Center(
+              return const Center(
                   child: CircularProgressIndicator(
                 color: Colors.amber,
               ));

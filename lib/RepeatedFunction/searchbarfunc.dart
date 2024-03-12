@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:r08fullmovieapp/DetailScreen/checker.dart';
 import 'package:r08fullmovieapp/RepeatedFunction/repttext.dart';
-import 'package:r08fullmovieapp/apikey/apikey.dart';
+
 import 'package:http/http.dart' as http;
 import 'package:fluttertoast/fluttertoast.dart';
 
 import 'dart:convert';
+
+import '../apikey/apiKey.dart';
 
 class searchbarfun extends StatefulWidget {
   const searchbarfun({super.key});
@@ -20,7 +22,7 @@ class _searchbarfunState extends State<searchbarfun> {
 
   Future<void> searchlistfunction(val) async {
     var searchurl =
-        'https://api.themoviedb.org/3/search/multi?api_key=$apikey&query=$val';
+        'https://api.themoviedb.org/3/search/multi?api_key=$apiKey&query=$val';
     var searchresponse = await http.get(Uri.parse(searchurl));
     if (searchresponse.statusCode == 200) {
       var tempdata = jsonDecode(searchresponse.body);
@@ -74,7 +76,7 @@ class _searchbarfunState extends State<searchbarfun> {
                 width: MediaQuery.of(context).size.width,
                 decoration: BoxDecoration(
                     color: Colors.white.withOpacity(0.2),
-                    borderRadius: BorderRadius.all(Radius.circular(10))),
+                    borderRadius: const BorderRadius.all(Radius.circular(10))),
                 child: TextField(
                   autofocus: false,
                   controller: searchtext,
@@ -103,7 +105,8 @@ class _searchbarfunState extends State<searchbarfun> {
                               toastLength: Toast.LENGTH_SHORT,
                               gravity: ToastGravity.BOTTOM,
                               timeInSecForIosWeb: 2,
-                              backgroundColor: Color.fromRGBO(18, 18, 18, 1),
+                              backgroundColor:
+                                  const Color.fromRGBO(18, 18, 18, 1),
                               textColor: Colors.white,
                               fontSize: 16.0);
 
@@ -117,7 +120,7 @@ class _searchbarfunState extends State<searchbarfun> {
                           color: Colors.amber.withOpacity(0.6),
                         ),
                       ),
-                      prefixIcon: Icon(
+                      prefixIcon: const Icon(
                         Icons.search,
                         color: Colors.amber,
                       ),
@@ -129,23 +132,23 @@ class _searchbarfunState extends State<searchbarfun> {
               ),
               //
               //
-              SizedBox(
+              const SizedBox(
                 height: 5,
               ),
 
               //if textfield has focus and search result is not empty then display search result
 
-              searchtext.text.length > 0
+              searchtext.text.isNotEmpty
                   ? FutureBuilder(
                       future: searchlistfunction(val1),
                       builder: (context, snapshot) {
                         if (snapshot.connectionState == ConnectionState.done) {
-                          return Container(
+                          return SizedBox(
                               height: 400,
                               child: ListView.builder(
                                   itemCount: searchresult.length,
                                   scrollDirection: Axis.vertical,
-                                  physics: BouncingScrollPhysics(),
+                                  physics: const BouncingScrollPhysics(),
                                   itemBuilder: (context, index) {
                                     return GestureDetector(
                                         onTap: () {
@@ -161,13 +164,13 @@ class _searchbarfunState extends State<searchbarfun> {
                                                       )));
                                         },
                                         child: Container(
-                                            margin: EdgeInsets.only(
+                                            margin: const EdgeInsets.only(
                                                 top: 4, bottom: 4),
                                             height: 180,
                                             width: MediaQuery.of(context)
                                                 .size
                                                 .width,
-                                            decoration: BoxDecoration(
+                                            decoration: const BoxDecoration(
                                                 color: Color.fromRGBO(
                                                     20, 20, 20, 1),
                                                 borderRadius: BorderRadius.all(
@@ -180,7 +183,7 @@ class _searchbarfunState extends State<searchbarfun> {
                                                     0.4,
                                                 decoration: BoxDecoration(
                                                     borderRadius:
-                                                        BorderRadius.all(
+                                                        const BorderRadius.all(
                                                             Radius.circular(
                                                                 10)),
                                                     image: DecorationImage(
@@ -190,7 +193,7 @@ class _searchbarfunState extends State<searchbarfun> {
                                                             'https://image.tmdb.org/t/p/w500${searchresult[index]['poster_path']}'),
                                                         fit: BoxFit.fill)),
                                               ),
-                                              SizedBox(
+                                              const SizedBox(
                                                 width: 20,
                                               ),
                                               Padding(
@@ -218,7 +221,7 @@ class _searchbarfunState extends State<searchbarfun> {
                                                               //vote average box
                                                               Container(
                                                                 padding:
-                                                                    EdgeInsets
+                                                                    const EdgeInsets
                                                                         .all(5),
                                                                 height: 30,
                                                                 // width:
@@ -229,7 +232,8 @@ class _searchbarfunState extends State<searchbarfun> {
                                                                         .withOpacity(
                                                                             0.2),
                                                                     borderRadius:
-                                                                        BorderRadius.all(
+                                                                        const BorderRadius
+                                                                            .all(
                                                                             Radius.circular(6))),
                                                                 child: Center(
                                                                   child: Row(
@@ -237,7 +241,7 @@ class _searchbarfunState extends State<searchbarfun> {
                                                                         MainAxisAlignment
                                                                             .center,
                                                                     children: [
-                                                                      Icon(
+                                                                      const Icon(
                                                                         Icons
                                                                             .star,
                                                                         color: Colors
@@ -245,7 +249,7 @@ class _searchbarfunState extends State<searchbarfun> {
                                                                         size:
                                                                             20,
                                                                       ),
-                                                                      SizedBox(
+                                                                      const SizedBox(
                                                                         width:
                                                                             5,
                                                                       ),
@@ -255,14 +259,14 @@ class _searchbarfunState extends State<searchbarfun> {
                                                                   ),
                                                                 ),
                                                               ),
-                                                              SizedBox(
+                                                              const SizedBox(
                                                                 width: 10,
                                                               ),
 
                                                               //popularity
                                                               Container(
                                                                 padding:
-                                                                    EdgeInsets
+                                                                    const EdgeInsets
                                                                         .all(5),
                                                                 height: 30,
                                                                 decoration: BoxDecoration(
@@ -271,7 +275,8 @@ class _searchbarfunState extends State<searchbarfun> {
                                                                         .withOpacity(
                                                                             0.2),
                                                                     borderRadius:
-                                                                        BorderRadius.all(
+                                                                        const BorderRadius
+                                                                            .all(
                                                                             Radius.circular(8))),
                                                                 child: Center(
                                                                   child: Row(
@@ -279,7 +284,7 @@ class _searchbarfunState extends State<searchbarfun> {
                                                                         MainAxisAlignment
                                                                             .center,
                                                                     children: [
-                                                                      Icon(
+                                                                      const Icon(
                                                                         Icons
                                                                             .people_outline_sharp,
                                                                         color: Colors
@@ -287,7 +292,7 @@ class _searchbarfunState extends State<searchbarfun> {
                                                                         size:
                                                                             20,
                                                                       ),
-                                                                      SizedBox(
+                                                                      const SizedBox(
                                                                         width:
                                                                             5,
                                                                       ),
@@ -303,7 +308,7 @@ class _searchbarfunState extends State<searchbarfun> {
                                                           ),
                                                         ),
 
-                                                        Container(
+                                                        SizedBox(
                                                             width: MediaQuery.of(
                                                                         context)
                                                                     .size
@@ -316,7 +321,7 @@ class _searchbarfunState extends State<searchbarfun> {
                                                                         .left,
                                                                 ' ${searchresult[index]['overview']}',
                                                                 // 'dsfsafsdffdsfsdf sdfsadfsdf sadfsafd',
-                                                                style: TextStyle(
+                                                                style: const TextStyle(
                                                                     fontSize:
                                                                         12,
                                                                     color: Colors
@@ -325,7 +330,7 @@ class _searchbarfunState extends State<searchbarfun> {
                                             ])));
                                   }));
                         } else {
-                          return Center(
+                          return const Center(
                               child: CircularProgressIndicator(
                             color: Colors.amber,
                           ));

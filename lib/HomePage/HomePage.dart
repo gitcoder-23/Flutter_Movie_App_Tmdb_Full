@@ -9,8 +9,9 @@ import '../SectionHomeUi/tvseries.dart';
 import '../SectionHomeUi/upcomming.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/services.dart';
-import 'package:r08fullmovieapp/apikey/apikey.dart';
 import '../RepeatedFunction/Drawer.dart';
+import '../apiLinks/apiLinks.dart';
+import '../apikey/apiKey.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key});
@@ -25,7 +26,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   Future<void> trendinglist(int checkerno) async {
     if (checkerno == 1) {
       var trendingweekurl =
-          'https://api.themoviedb.org/3/trending/all/week?api_key=$apikey';
+          'https://api.themoviedb.org/3/trending/all/week?api_key=$apiKey';
       var trendingweekresponse = await http.get(Uri.parse(trendingweekurl));
       if (trendingweekresponse.statusCode == 200) {
         var tempdata = jsonDecode(trendingweekresponse.body);
@@ -42,7 +43,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
       }
     } else if (checkerno == 2) {
       var trendingweekurl =
-          'https://api.themoviedb.org/3/trending/all/day?api_key=$apikey';
+          'https://api.themoviedb.org/3/trending/all/day?api_key=$apiKey';
       var trendingweekresponse = await http.get(Uri.parse(trendingweekurl));
       if (trendingweekresponse.statusCode == 200) {
         var tempdata = jsonDecode(trendingweekresponse.body);
@@ -53,6 +54,34 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
             'poster_path': trendingweekjson[i]['poster_path'],
             'vote_average': trendingweekjson[i]['vote_average'],
             'media_type': trendingweekjson[i]['media_type'],
+            'indexno': i,
+          });
+        }
+      }
+    } else if (checkerno == 3) {
+      var trendingDayWeekResponse = await http.get(Uri.parse(discoverUrl));
+      print('discoverUrl-=> $trendingDayWeekResponse');
+      if (trendingDayWeekResponse.statusCode == 200) {
+        var tempData = jsonDecode(trendingDayWeekResponse.body);
+
+        List<dynamic> trendingWeekJson = tempData['results'];
+
+        for (var i = 0; i < trendingWeekJson.length; i++) {
+          trendingweek.add({
+            "id": trendingWeekJson[i]['id'],
+            "poster_path": trendingWeekJson[i]['poster_path'],
+            "vote_average": trendingWeekJson[i]['vote_average'],
+            "vote_count": trendingWeekJson[i]['vote_count'],
+            "adult": trendingWeekJson[i]['adult'],
+            "backdrop_path": trendingWeekJson[i]['backdrop_path'],
+            "title": trendingWeekJson[i]['title'],
+            "original_language": trendingWeekJson[i]['original_language'],
+            "original_title": trendingWeekJson[i]['original_title'],
+            "overview": trendingWeekJson[i]['overview'],
+            "media_type": trendingWeekJson[i]['media_type'],
+            "popularity": trendingWeekJson[i]['popularity'],
+            "release_date": trendingWeekJson[i]['release_date'],
+            "video": trendingWeekJson[i]['video'],
             'indexno': i,
           });
         }
@@ -73,22 +102,23 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    TabController _tabController = TabController(length: 3, vsync: this);
+    TabController tabController = TabController(length: 3, vsync: this);
 
     return Scaffold(
         drawer: drawerfunc(),
-        backgroundColor: Color.fromRGBO(18, 18, 18, 0.5),
-        body: CustomScrollView(physics: BouncingScrollPhysics(), slivers: [
+        backgroundColor: const Color.fromRGBO(18, 18, 18, 0.5),
+        body:
+            CustomScrollView(physics: const BouncingScrollPhysics(), slivers: [
           SliverAppBar(
-              backgroundColor: Color.fromRGBO(18, 18, 18, 0.9),
+              backgroundColor: const Color.fromRGBO(18, 18, 18, 0.9),
               title: //switch between the trending this week and trending today
                   Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text('Trending' + ' 🔥',
+                  Text('Trending' ' 🔥',
                       style: TextStyle(
                           color: Colors.white.withOpacity(0.8), fontSize: 16)),
-                  SizedBox(width: 10),
+                  const SizedBox(width: 10),
                   Container(
                     height: 45,
                     decoration:
@@ -100,14 +130,15 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                         underline:
                             Container(height: 0, color: Colors.transparent),
                         dropdownColor: Colors.black.withOpacity(0.6),
-                        icon: Icon(
+                        icon: const Icon(
                           Icons.arrow_drop_down_sharp,
                           color: Colors.amber,
                           size: 30,
                         ),
                         value: uval,
-                        items: [
+                        items: const [
                           DropdownMenuItem(
+                            value: 1,
                             child: Text(
                               'Weekly',
                               style: TextStyle(
@@ -116,9 +147,9 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                                 fontSize: 16,
                               ),
                             ),
-                            value: 1,
                           ),
                           DropdownMenuItem(
+                            value: 2,
                             child: Text(
                               'Daily',
                               style: TextStyle(
@@ -127,7 +158,17 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                                 fontSize: 16,
                               ),
                             ),
-                            value: 2,
+                          ),
+                          DropdownMenuItem(
+                            value: 3,
+                            child: Text(
+                              'Discover',
+                              style: TextStyle(
+                                decoration: TextDecoration.none,
+                                color: Colors.white,
+                                fontSize: 16,
+                              ),
+                            ),
                           ),
                         ],
                         onChanged: (value) {
@@ -147,7 +188,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
               toolbarHeight: 60,
               pinned: true,
               expandedHeight: MediaQuery.of(context).size.height * 0.5,
-              actions: [
+              actions: const [
                 // IconButton(icon: Icon(Icons.favorite), onPressed: () {}),
               ],
               flexibleSpace: FlexibleSpaceBar(
@@ -160,7 +201,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                         options: CarouselOptions(
                             viewportFraction: 1,
                             autoPlay: true,
-                            autoPlayInterval: Duration(seconds: 2),
+                            autoPlayInterval: const Duration(seconds: 2),
                             height: MediaQuery.of(context).size.height),
                         items: trendingweek.map((i) {
                           return Builder(builder: (BuildContext context) {
@@ -198,6 +239,10 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                                                           .spaceBetween,
                                                   children: [
                                                     Container(
+                                                      margin:
+                                                          const EdgeInsets.only(
+                                                              left: 10,
+                                                              bottom: 6),
                                                       child: Text(
                                                         ' # '
                                                         '${i['indexno'] + 1}',
@@ -207,40 +252,41 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                                                                     0.7),
                                                             fontSize: 18),
                                                       ),
-                                                      margin: EdgeInsets.only(
-                                                          left: 10, bottom: 6),
                                                     ),
                                                     Container(
-                                                        margin: EdgeInsets.only(
-                                                            right: 8,
-                                                            bottom: 5),
+                                                        margin:
+                                                            const EdgeInsets.only(
+                                                                right: 8,
+                                                                bottom: 5),
                                                         width: 90,
                                                         padding:
-                                                            EdgeInsets.all(5),
+                                                            const EdgeInsets
+                                                                .all(5),
                                                         decoration: BoxDecoration(
                                                             color: Colors.amber
                                                                 .withOpacity(
                                                                     0.2),
                                                             borderRadius:
-                                                                BorderRadius
-                                                                    .all(Radius
-                                                                        .circular(
-                                                                            8))),
+                                                                const BorderRadius
+                                                                    .all(
+                                                                    Radius.circular(
+                                                                        8))),
                                                         child: Row(
                                                             mainAxisAlignment:
                                                                 MainAxisAlignment
                                                                     .spaceEvenly,
                                                             children: [
                                                               //rating icon
-                                                              Icon(Icons.star,
+                                                              const Icon(
+                                                                  Icons.star,
                                                                   color: Colors
                                                                       .amber,
                                                                   size: 20),
-                                                              SizedBox(
+                                                              const SizedBox(
                                                                   width: 10),
                                                               Text(
                                                                   '${i['vote_average']}',
-                                                                  style: TextStyle(
+                                                                  style: const TextStyle(
                                                                       color: Colors
                                                                           .white,
                                                                       fontWeight:
@@ -253,7 +299,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                         }).toList(),
                       );
                     } else {
-                      return Center(
+                      return const Center(
                           child: CircularProgressIndicator(
                         color: Colors.amber,
                       ));
@@ -264,15 +310,15 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
           //////////////////////////////////////////////End of Flexible bar///////////////////////////////////////////////////////////////
           SliverList(
               delegate: SliverChildListDelegate([
-            searchbarfun(),
-            Container(
+            const searchbarfun(),
+            SizedBox(
                 height: 45,
                 width: MediaQuery.of(context).size.width,
                 child: TabBar(
-                    physics: BouncingScrollPhysics(),
-                    labelPadding: EdgeInsets.symmetric(horizontal: 25),
+                    physics: const BouncingScrollPhysics(),
+                    labelPadding: const EdgeInsets.symmetric(horizontal: 25),
                     isScrollable: true,
-                    controller: _tabController,
+                    controller: tabController,
                     indicator: BoxDecoration(
                         borderRadius: BorderRadius.circular(30),
                         color: Colors.amber.withOpacity(0.4)),
@@ -281,10 +327,10 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                       Tab(child: Tabbartext('Movies')),
                       Tab(child: Tabbartext('Upcoming'))
                     ])),
-            Container(
+            SizedBox(
                 height: 1100,
                 width: MediaQuery.of(context).size.width,
-                child: TabBarView(controller: _tabController, children: const [
+                child: TabBarView(controller: tabController, children: const [
                   TvSeries(),
                   Movie(),
                   Upcomming(),
